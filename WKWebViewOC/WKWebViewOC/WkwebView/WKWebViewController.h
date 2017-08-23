@@ -37,5 +37,14 @@
  */
 - (void)POSTWebURLSring:(NSString *)string postData:(NSString *)postData;
 
+//pzz
+/**
+ *  tint color of progress view
+ */
+@property (nonatomic)UIColor* progressViewColor;
 
 @end
+
+
+//http://blog.csdn.net/joonsheng/article/details/41362499
+//http://www.jianshu.com/p/9c4efe602b59

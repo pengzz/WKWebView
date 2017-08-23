@@ -60,6 +60,9 @@ static void *WkwebBrowserContext = &WkwebBrowserContext;
     //添加右边刷新按钮
     UIBarButtonItem *roadLoad = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(roadLoadClicked)];
     self.navigationItem.rightBarButtonItem = roadLoad;
+    
+    //pzz
+    self.navigationController.interactivePopGestureRecognizer.delegate = self;
 }
 
 - (void)viewWillAppear:(BOOL)animated{
@@ -84,7 +87,8 @@ static void *WkwebBrowserContext = &WkwebBrowserContext;
 }
 
 -(void)customBackItemClicked{
-    if (self.wkWebView.goBack) {
+    //if (self.wkWebView.goBack) {//pzz改掉原来一个bug
+    if (self.wkWebView.canGoBack) {//pzz改掉原来一个bug
         [self.wkWebView goBack];
     }else{
         [self.navigationController popViewControllerAnimated:YES];
@@ -471,6 +475,9 @@ static void *WkwebBrowserContext = &WkwebBrowserContext;
         // 设置进度条的色彩
         [_progressView setTrackTintColor:[UIColor colorWithRed:240.0/255 green:240.0/255 blue:240.0/255 alpha:1.0]];
         _progressView.progressTintColor = [UIColor greenColor];
+        //pzz
+        _progressView.tintColor = self.progressViewColor;
+        _progressView.trackTintColor = [UIColor clearColor];
     }
     return _progressView;
 }
@@ -498,6 +505,16 @@ static void *WkwebBrowserContext = &WkwebBrowserContext;
 //注意，观察的移除
 -(void)dealloc{
     [self.wkWebView removeObserver:self forKeyPath:NSStringFromSelector(@selector(estimatedProgress))];
+}
+
+//pzz
+-(UIColor *)progressViewColor
+{
+    if (!_progressViewColor) {
+        //默认颜色
+        _progressViewColor = [UIColor colorWithRed:119.0/255 green:228.0/255 blue:115.0/255 alpha:1];
+    }
+    return _progressViewColor;
 }
 
 @end

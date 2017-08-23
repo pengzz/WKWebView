@@ -259,6 +259,9 @@ static void *WkwebBrowserContext = &WkwebBrowserContext;
 
 //服务器开始请求的时候调用
 - (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler {
+    NSLog(@"url: %@",navigationAction.request.URL);//pzz
+    [self updateHostLabelWithRequest:navigationAction.request];//pzz
+    
 //    NSString* orderInfo = [[AlipaySDK defaultService]fetchOrderInfoFromH5PayUrl:[navigationAction.request.URL absoluteString]];
 //    if (orderInfo.length > 0) {
 //        [self payWithUrlOrder:orderInfo];
@@ -516,5 +519,43 @@ static void *WkwebBrowserContext = &WkwebBrowserContext;
     }
     return _progressViewColor;
 }
+//pzz
+- (UILabel *)hostInfoLabel {
+    if (!_hostInfoLabel) {
+        _hostInfoLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 10, self.view.frame.size.width, 20)];
+        _hostInfoLabel.textColor = [UIColor grayColor];
+        _hostInfoLabel.font = [UIFont systemFontOfSize:12];
+        _hostInfoLabel.textAlignment = NSTextAlignmentCenter;
+        //添加view
+        [self.wkWebView insertSubview:self.hostInfoLabel belowSubview:self.wkWebView.scrollView];
+        {
+            if (_isNavHidden == YES) {
+                //_progressView.frame = CGRectMake(0, 20, self.view.bounds.size.width, 3);
+                _hostInfoLabel.frame=CGRectMake(0, 10+CGRectGetMinY(self.progressView.frame), self.view.frame.size.width, 20);
+            }else{
+                //_progressView.frame = CGRectMake(0, 64, self.view.bounds.size.width, 3);
+                if(self.navigationController.navigationBar.translucent==YES){
+                    _hostInfoLabel.frame=CGRectMake(0, 10+CGRectGetMinY(self.progressView.frame), self.view.frame.size.width, 20);
+                }else{
+                    _hostInfoLabel.frame=CGRectMake(0, 10+0, self.view.frame.size.width, 20);
+                }
+            }
+            
+        }
+    }
+    return _hostInfoLabel;
+}
+- (void)updateHostLabelWithRequest:(NSURLRequest *)request {
+    NSString *host = [request.URL host];
+    if (host) {
+        self.hostInfoLabel.text = [NSString stringWithFormat:@"此网页由 %@ 提供", host];
+        //self.wkWebView.backgroundColor = [UIColor colorWithRed:240.0/255 green:240.0/255 blue:240.0/255 alpha:1.0];
+        //self.wkWebView.backgroundColor = [UIColor clearColor];
+        //self.wkWebView.scrollView.opaque = NO;//这个不起作用
+        //self.wkWebView.scrollView.backgroundColor = [UIColor clearColor];//不用这一句也可以
+        [self.wkWebView setOpaque:NO];
+    }
+}
+
 
 @end

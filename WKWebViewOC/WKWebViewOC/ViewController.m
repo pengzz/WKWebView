@@ -30,6 +30,7 @@
 - (IBAction)loadingAction:(UIButton *)sender {
     WKWebViewController *web = [[WKWebViewController alloc] init];
     [web loadWebURLSring:@"https://www.baidu.com"];
+    //web.isNavHidden = YES;
     [self.navigationController pushViewController:web animated:YES];
 }
 

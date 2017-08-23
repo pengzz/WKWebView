@@ -42,6 +42,11 @@
  *  tint color of progress view
  */
 @property (nonatomic)UIColor* progressViewColor;
+//pzz
+/**
+ //此网页由 %@ 提供
+ */
+@property (strong, nonatomic) UILabel *hostInfoLabel;
 
 @end
 
